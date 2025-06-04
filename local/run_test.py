@@ -19,7 +19,7 @@ print("\n✅ Schritt 1: Push to basic FeatureViews")
 store.push("my_push_source", push_df)
 
 # 2. read post push(on-read + on-write ODFVs)
-print("\n📤 Schritt 2: get_online_features nach Push")
+print("\n📤 Schritt 2: get_online_features post Push")
 res_push = store.get_online_features(
     features=[
         # "write_time_price_plus_revenue:price_plus_revenue",
@@ -33,7 +33,7 @@ res_push = store.get_online_features(
 ).to_df()
 print(res_push)
 
-print("\n<UNK> Schritt 3: write_to_online_store nach basis feature views")
+print("\n<UNK> Schritt 3: write_to_online_store into basic feature view")
 customer_df = pd.DataFrame({
     "customer_id": [123],
     "revenue": [41.0],
@@ -62,14 +62,14 @@ print(f"res write_to_online: {res_write}")
 
 
 # 3. Materialize from offline store source
-print("\n🛠️ Schritt 3: Materialisierung")
+print("\n🛠️ Schritt 3: materialization")
 store.materialize(
     start_date=datetime.now() - timedelta(days=1),
     end_date=datetime.now() + timedelta(minutes=5)
 )
 
 # 4. Read post materialization
-print("\n📥 Schritt 4: get_online_features nach Materialisierung")
+print("\n📥 Schritt 4: get_online_features post materialization")
 res_materialized = store.get_online_features(
     features=[
         "write_time_price_plus_revenue:price_plus_revenue",
