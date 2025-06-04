@@ -1,0 +1,1 @@
+feast[postgres,redis]==0.47.0

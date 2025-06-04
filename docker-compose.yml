@@ -1,0 +1,80 @@
+services:
+
+  feast43:
+    build: ./feast43
+    container_name: feast43
+    volumes:
+      - ./feature_repo:/app/feature_repo
+      - ./local/run_test.py:/app/feature_repo/run_test.py
+    depends_on:
+      - registry
+      - redis
+    environment:
+      - FEAST_USAGE=False
+    working_dir: /app/feature_repo
+    command: ["python", "run_test.py"]
+
+  feast47:
+    build: ./feast47
+    container_name: feast47
+    volumes:
+      - ./feature_repo:/app/feature_repo
+      - ./local/run_test.py:/app/feature_repo/run_test.py
+    depends_on:
+      - registry
+      - redis
+    environment:
+      - FEAST_USAGE=False
+    working_dir: /app/feature_repo
+    command: ["python", "run_test.py"]
+
+
+  feast49:
+    build: ./feast49
+    container_name: feast49
+    volumes:
+      - ./feature_repo:/app/feature_repo
+      - ./local/run_test.py:/app/feature_repo/run_test.py
+    depends_on:
+      - registry
+      - redis
+    environment:
+      - FEAST_USAGE=False
+    working_dir: /app/feature_repo
+    command: ["python", "run_test.py"]
+
+
+  registry:
+    container_name: registry
+    image: postgres:17-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_DB=feast
+    ports:
+      - "55001:5432"
+    volumes:
+      - ./feast-postgres-registry:/var/lib/postgresql/data
+      - ./postgresql.conf:/etc/postgresql/postgresql.conf
+      - ./pg_hba.conf:/etc/postgresql/pg_hba.conf
+    restart: unless-stopped
+
+    command: >
+      postgres
+      -c config_file=/etc/postgresql/postgresql.conf
+      -c hba_file=/etc/postgresql/pg_hba.conf
+      -c listen_addresses='*'
+      -c max_connections=200
+
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      retries: 5
+
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - "6379:6379"
+    command: redis-server
+    restart: unless-stopped
