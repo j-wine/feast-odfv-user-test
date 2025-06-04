@@ -58,7 +58,7 @@ res_write = store.get_online_features(
         "customer_id": 74
     }]
 ).to_df()
-print(f"res write_to_online: {res_write}")
+print(f"res write_to_online: \n{res_write}")
 
 
 # 3. Materialize from offline store source
